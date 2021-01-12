@@ -1,1 +1,2 @@
-# gmail-metadata-tutorial
+# Gmail API Metadata guide
+You can find the article related to this repo [here](https://medium.com/nat-personal-relationship-manager/full-gmail-api-guide-how-to-retrieve-email-metadata-to-use-it-in-your-app-511c77017326?source=collection_home---4------0-----------------------)

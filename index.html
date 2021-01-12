@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Gmail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- BEGIN Pre-requisites -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+    </script>
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
+    </script>
+    <!-- END Pre-requisites -->
+    <!-- Continuing the <head> section -->
+    <script>
+        function start() {
+            gapi.load('auth2', function () {
+                auth2 = gapi.auth2.init({
+                    client_id: 'YOUR_GOOGLE_CLIENT_ID',
+                    // Scopes to request in addition to 'profile' and 'email'
+                    scope: 'https://www.googleapis.com/auth/gmail.metadata'
+                });
+            });
+        }
+    </script>
+    <!-- Last part of BODY element in file index.html -->
+    <script>
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                console.log(authResult['code'])
+                var code = authResult['code'];
+                // Hide the sign-in button now that the user is authorized, for example:
+                $('#signinButton').attr('style', 'display: none');
+
+                // Send the code to the server
+                $.ajax({
+                    type: 'POST',
+
+                    url: 'YOUR_API',
+                    // Always include an `X-Requested-With` header in every AJAX request,
+                    // to protect against CSRF attacks.
+                    contentType: 'application/json',
+                    success: function (result) {
+
+                        location.href = 'URL_TO_REDIRECT_USERS';
+                    },
+                    headers: {
+                        'Authorization': 'Basic SECRET'
+                    },
+                    processData: false,
+                    dataType: 'json',
+                    data: JSON.stringify({ "code": code })
+                });
+            } else {
+                // There was an error.
+            }
+        }
+    </script>
+</head>
+
+
+<body>
+    <!-- Add where you want your sign-in button to render -->
+    <!-- Use an image that follows the branding guidelines in a real app -->
+
+   <a href="#" id="signinButton"><img src="images/button.svg" /></a>
+    <script>
+        $('#signinButton').click(function (e) {
+            if (e) e.preventDefault();
+
+            // signInCallback defined in step 6.
+            auth2.grantOfflineAccess().then(signInCallback);
+        });
+    </script>
+</body>
+</html>
